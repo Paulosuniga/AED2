@@ -1,0 +1,34 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+typedef struct s {
+int NroUSP; // chave primária
+int curso;
+int estado;
+int idade;
+bool valido; // para exclusão lógica
+} REGISTRO;
+
+bool inserirIndice (REGISTRO* tabela, int nroUSP, int end);
+int buscarEndereco (REGISTRO* tabela, int nroUSP);
+int excluriIndice (REGISTRO* tabela, int nroUSP);
+
+REGISTRO tabela[20];
+int prox = 0;
+
+REGISTRO retornaRegistroComNUSP (FILE* arq, int X)
+{
+    int end = buscarEndereco (tabela, X);
+
+    if (end == -1)
+        return NULL;
+
+    REGISTRO retorno;
+
+    fseek (arq, sizeof (REGISTRO) * end, SEEK_CUR);
+
+    if (fread (&retorno, sizeof (REGISTRO), 1, arq) == 1)
+        return retorno;
+    
+    return NULL;
+}
